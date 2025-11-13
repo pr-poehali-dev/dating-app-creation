@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -12,6 +12,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
+import ChatWindow from '@/components/ChatWindow';
 
 interface Profile {
   id: number;
@@ -67,6 +68,8 @@ const Index = () => {
   const [currentView, setCurrentView] = useState<'discover' | 'favorites' | 'messages'>('discover');
   const [ageRange, setAgeRange] = useState<number[]>([25, 40]);
   const [maxDistance, setMaxDistance] = useState<number[]>([10]);
+  const [selectedChatUser, setSelectedChatUser] = useState<Profile | null>(null);
+  const currentUserId = 1;
 
   const toggleFavorite = (profileId: number) => {
     setFavorites(prev =>
@@ -272,13 +275,7 @@ const Index = () => {
             </div>
 
             {currentView === 'messages' ? (
-              <Card className="p-12 text-center animate-fade-in">
-                <Icon name="MessageCircle" size={64} className="mx-auto text-muted-foreground mb-4" />
-                <h3 className="text-xl font-semibold mb-2">Начните общение</h3>
-                <p className="text-muted-foreground">
-                  Добавьте профили в избранное и начните диалог
-                </p>
-              </Card>
+              <ChatWindow currentUserId={currentUserId} />
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                 {displayedProfiles.map((profile, index) => (
@@ -351,7 +348,13 @@ const Index = () => {
                           <Icon name="User" size={16} className="mr-2" />
                           Профиль
                         </Button>
-                        <Button className="flex-1">
+                        <Button 
+                          className="flex-1"
+                          onClick={() => {
+                            setSelectedChatUser(profile);
+                            setCurrentView('messages');
+                          }}
+                        >
                           <Icon name="MessageCircle" size={16} className="mr-2" />
                           Написать
                         </Button>

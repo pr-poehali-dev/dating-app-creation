@@ -1,0 +1,27 @@
+{
+  "tests": [
+    {
+      "name": "Send message",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "action": "send",
+        "user1Id": "1",
+        "user2Id": "2",
+        "senderId": "1",
+        "content": "Привет! Как дела?"
+      },
+      "expectedStatus": 200,
+      "expectedBody": {
+        "success": true
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Get chat list for user",
+      "method": "GET",
+      "path": "/?action=list&userId=1",
+      "expectedStatus": 200
+    }
+  ]
+}
